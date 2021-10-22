@@ -4,7 +4,9 @@
       <img src="@\assets\logopaymin.png" />
       <nav>
         <button v-if="is_auth" v-on:click="loadHome">Home</button>
-        <button v-if="is_auth">Transactions</button>
+        <button v-if="is_auth" v-on:click="loadTransaction">
+          Transactions
+        </button>
         <button v-if="is_auth" v-on:click="logOut">Logout</button>
         <button v-if="is_auth" v-on:click="loadProfile">Profile</button>
         <button v-if="!is_auth" v-on:click="loadLogIn">LogIn</button>
@@ -63,6 +65,9 @@ export default {
     },
     loadProfile: function () {
       this.$router.push({ name: "profile" });
+    },
+    loadTransaction: function () {
+      this.$router.push({ name: "transaction" });
     },
     logOut: function () {
       localStorage.clear();

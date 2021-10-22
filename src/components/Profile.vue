@@ -35,6 +35,7 @@ export default {
         localStorage.getItem("token_refresh") === null
       ) {
         this.$emit("logOut");
+        console.log("Error al comparar tokens");
         return;
       }
 
@@ -54,6 +55,7 @@ export default {
         })
         .catch(() => {
           this.$emit("logOut");
+          console.log("Error en el axios");
         });
     },
 
@@ -69,6 +71,7 @@ export default {
         })
         .catch(() => {
           this.$emit("logOut");
+          console.log("Error en el refresh token");
         });
     },
   },
