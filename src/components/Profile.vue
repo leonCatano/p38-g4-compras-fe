@@ -1,15 +1,82 @@
 <template>
-  <div v-if="loaded" class="information">
-    <h1>Your profile</h1>
-    <h2>
-      Name: <span>{{ name }}</span>
-    </h2>
-    <h2>
-      Credit card name: <span>{{ card_name }} </span>
-    </h2>
-    <h2>
-      Email: <span>{{ email }}</span>
-    </h2>
+  <div>
+    <h1>
+      ¡Welcome <span> {{ username }} </span>! These are your credit cards
+    </h1>
+  </div>
+  <div>
+    <h1>CREDIT CARDS</h1>
+    <div>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Number</th>
+          <th>Franchise</th>
+          <th>Bank's Name</th>
+          
+        </tr>
+        <tr v-for="credit_card in credit_card">
+                              <td>
+            {{ credit_card.id}}
+          </td>
+          <td>
+            {{ credit_card.card_name }}
+          </td>
+          <td>
+            {{ credit_card.card_number }}
+          </td>
+          <td>
+            {{ credit_card.card_franchise }}
+          </td>
+          <td>
+            {{ credit_card.bank_name }}
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div>
+    <h1>Transactions</h1>
+    <div>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Value</th>
+          <th>Store name</th>
+          <th>Credit card</th>
+          <th>Action</th>
+        </tr>
+        <tr v-for="transaction in transaction">
+          <td>
+            {{ transaction.id }}
+          </td>
+          <td>
+            {{ transaction.transaction_date }}
+          </td>
+          <td>
+            <span v-if="transaction.transaction_status == 'A'">Aprobada</span>
+            <span v-if="transaction.transaction_status == 'D'">Denegada</span>
+            <span v-if="transaction.transaction_status == 'R'">Reversado</span>
+            <span v-if="transaction.transaction_status == 'E'">En proceso</span>
+          </td>
+          <td>
+            {{ transaction.transaction_value }}
+          </td>
+          <td>
+            {{ transaction.store_name }}
+          </td>
+          <td>
+            {{ transaction.id_credit_card }}
+          </td>
+          <td>
+            <button>X</button>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -22,10 +89,9 @@ export default {
 
   data: function () {
     return {
-      name: "",
-      email: "",
-      card_name: "",
-      loaded: false,
+      credit_card: [],
+      username: localStorage.getItem("username") || "none",
+      transaction: [],
     };
   },
   methods: {
@@ -44,17 +110,33 @@ export default {
       let userId = jwt_decode(token).user_id.toString();
 
       axios
-        .get(`https://p37-g4-be-compra-tg.herokuapp.com/user/${userId}/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((result) => {
-          this.name = result.data.name;
-          this.email = result.data.email;
-          this.card_name = result.data.credit_card.card_name;
-          this.loaded = true;
+        .get(
+          `https://p37-g4-be-compra-tg.herokuapp.com/creditCard/list/${userId}/`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          this.credit_card = response.data;
         })
         .catch(() => {
-          this.$emit("logOut");
+          /*this.$emit("logOut");*/
+          console.log("Error en el axios");
+        });
+      axios
+        .get(
+          `https://p37-g4-be-compra-tg.herokuapp.com/transaction/list/${userId}/`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((response) => {
+          console.log(response);
+          this.transaction = response.data;
+        })
+        .catch(() => {
+          /*this.$emit("logOut");*/
           console.log("Error en el axios");
         });
     },

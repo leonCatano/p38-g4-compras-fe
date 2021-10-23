@@ -104,8 +104,8 @@ body {
 }
 
 .header img {
-  height: 40%;
-  padding-left: 25px;
+  height: 70%;
+  padding-left: 50px;
   align-self: center;
 }
 .header h1 {
