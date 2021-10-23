@@ -17,11 +17,11 @@
           placeholder="Store's name"
         />
         <br />
-        <input
-          type="number"
-          v-model="transaction.id_credit_card"
-          placeholder="Id credit card"
-        />
+
+        
+        <select type="number" v-model="transaction.id_credit_card">
+          <option v-for="credit_card in credit_card" :value="credit_card.id">{{credit_card.id}} - {{credit_card.card_name}}</option>
+        </select>
         <br />
 
         <button type="submit">Send transaction</button>
@@ -44,12 +44,41 @@ export default {
         store_name: "",
         id_credit_card: 0,
       },
+      credit_card: [],
     };
   },
 
   methods: {
-    processCreateTransaction: function () {
+    getCreditCards: async function () {
+      if (
+        localStorage.getItem("token_access") === null ||
+        localStorage.getItem("token_refresh") === null
+      ) {
+        this.$emit("logOut");
+        console.log("Error al comparar tokens");
+        return;
+      }
 
+      await this.verifyToken();
+      let token = localStorage.getItem("token_access");
+      let userId = jwt_decode(token).user_id.toString();
+      axios
+        .get(
+          `https://p37-g4-be-compra-tg.herokuapp.com/creditCard/list/${userId}/`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((response) => {
+          console.log("Tarjetas listadas");
+          this.credit_card = response.data;
+        })
+        .catch(() => {
+          /*this.$emit("logOut");*/
+          console.log("Error en el axios");
+        });
+    },
+    processCreateTransaction: function () {
       let token = localStorage.getItem("token_access");
       let userId = jwt_decode(token).user_id.toString();
 
@@ -62,14 +91,32 @@ export default {
           }
         )
         .then((result) => {
-          alert("Succesful transaction"); 
-          this.$emit("loadProfile");
+          alert("Succesful transaction");
+          this.$router.push({ name: "profile" });
         })
         .catch((error) => {
           this.$emit("logOut");
           console.log("Error en el axios");
         });
     },
+        verifyToken: function () {
+      return axios
+        .post(
+          "https://p37-g4-be-compra-tg.herokuapp.com/refresh/",
+          { refresh: localStorage.getItem("token_refresh") },
+          { headers: {} }
+        )
+        .then((result) => {
+          localStorage.setItem("token_access", result.data.access);
+        })
+        .catch(() => {
+          this.$emit("home");
+          console.log("Error en el refresh token");
+        });
+    },
+  },
+  created: async function () {
+    this.getCreditCards();
   },
 };
 </script>

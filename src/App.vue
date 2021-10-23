@@ -4,13 +4,15 @@
       <img src="@\assets\logopaymin.png" />
       <nav>
         <button v-if="is_auth" v-on:click="loadHome">Home</button>
+        <button v-if="is_auth" v-on:click="loadProfile">My profile</button>
         <button v-if="is_auth" v-on:click="loadTransaction">
-          Transactions
+          Make a transaction
         </button>
-        <button v-if="is_auth" v-on:click="logOut">Logout</button>
-        <button v-if="is_auth" v-on:click="loadProfile">Profile</button>
+        
+        
         <button v-if="!is_auth" v-on:click="loadLogIn">LogIn</button>
         <button v-if="!is_auth" v-on:click="loadSignUp">SignUp</button>
+        <button v-if="is_auth" v-on:click="logOut">Logout</button>
       </nav>
     </div>
     <div class="main-component">

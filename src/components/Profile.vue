@@ -14,11 +14,10 @@
           <th>Number</th>
           <th>Franchise</th>
           <th>Bank's Name</th>
-          
         </tr>
-        <tr v-for="credit_card in credit_card">
-                              <td>
-            {{ credit_card.id}}
+        <tr v-for="credit_card in credit_card" >
+          <td>
+            {{ credit_card.id }}
           </td>
           <td>
             {{ credit_card.card_name }}
@@ -49,7 +48,7 @@
           <th>Credit card</th>
           <th>Action</th>
         </tr>
-        <tr v-for="transaction in transaction">
+        <tr v-for="transaction in transaction" :key="transaction.id">
           <td>
             {{ transaction.id }}
           </td>
@@ -69,10 +68,11 @@
             {{ transaction.store_name }}
           </td>
           <td>
-            {{ transaction.id_credit_card }}
+           {{ transaction.credit_card.card_name }}
+            
           </td>
           <td>
-            <button>X</button>
+            <button v-on:click="deleteTransaction(transaction.id)">X</button>
           </td>
         </tr>
       </table>
@@ -117,7 +117,7 @@ export default {
           }
         )
         .then((response) => {
-          console.log(response);
+          console.log("Tarjetas listadas");
           this.credit_card = response.data;
         })
         .catch(() => {
@@ -132,7 +132,7 @@ export default {
           }
         )
         .then((response) => {
-          console.log(response);
+          console.log("Transacciones listadas");
           this.transaction = response.data;
         })
         .catch(() => {
@@ -140,7 +140,38 @@ export default {
           console.log("Error en el axios");
         });
     },
+    deleteTransaction: async function (id_transaction) {
+      if (
+        localStorage.getItem("token_access") === null ||
+        localStorage.getItem("token_refresh") === null
+      ) {
+        this.$emit("logOut");
+        console.log("Error al comparar tokens");
+        return;
+      }
 
+      await this.verifyToken();
+      let token = localStorage.getItem("token_access");
+      let userId = jwt_decode(token).user_id.toString();
+      
+      axios
+        .get(
+          `https://p37-g4-be-compra-tg.herokuapp.com/transaction/remove/${userId}/` +
+            id_transaction +
+            "/",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        )
+        .then((result) => {
+          this.getData();
+          alert("Transacción eliminada correctamente.");
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("ERROR: No se pudo borrar.");
+        });
+    },
     verifyToken: function () {
       return axios
         .post(
@@ -152,7 +183,7 @@ export default {
           localStorage.setItem("token_access", result.data.access);
         })
         .catch(() => {
-          this.$emit("logOut");
+          this.$emit("home");
           console.log("Error en el refresh token");
         });
     },
