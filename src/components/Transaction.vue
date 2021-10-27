@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="welcome">
     <h3>
       ¡<span> {{ username }} </span>! <br />
       Next you will enter the data to make the purchase in the store of your
@@ -54,7 +54,7 @@ export default {
       },
       credit_card: [],
       transaction_list: [],
-      
+      username: localStorage.getItem("username") || "none",
     };
   },
 
@@ -164,6 +164,10 @@ export default {
 </script>
 
 <style>
+.welcome{
+  text-align: center;
+  padding-top: 50px;
+}
 .transaction_creation {
   margin: 0;
   padding: 0%;
@@ -173,11 +177,11 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  
 }
 
 .container_transaction_creation {
-  border: 1px solid #283747;
-  border-radius: 20px;
+
   width: 30%;
   height: 50%;
 

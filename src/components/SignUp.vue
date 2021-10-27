@@ -2,7 +2,7 @@
 
     <div class="signUp_user">
         <div class="container_signUp_user">
-            <h2>Registrarse</h2>
+            <h2>Sign up</h2>
                 
             <form v-on:submit.prevent="processSignUp" >
                 <input type="text" v-model="user.username" placeholder="Username">
@@ -30,7 +30,7 @@
                 <br>
 
 
-                <button type="submit">Registrarse</button>
+                <button type="submit">Sign up</button>
             </form>
         </div>
     </div>
@@ -94,11 +94,11 @@ methods: {
         display: flex;
         justify-content: center;
         align-items: center;
+  
     }
 
     .container_signUp_user {
-        border: 3px solid #283747;
-        border-radius: 10px;
+
         width: 25%;
         height: 60%;
 

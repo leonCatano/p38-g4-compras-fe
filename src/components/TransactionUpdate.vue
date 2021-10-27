@@ -1,9 +1,8 @@
 <template>
-  <div>
+  <div class="welcome">
     <h3>
       ¡<span> {{ username }} </span>! <br />
-      Next you will enter the data to make the purchase in the store of your
-      preference:
+      Select the transaction you want to update:
     </h3>
   </div>
   <div class="transaction_creation">
@@ -13,7 +12,7 @@
       <form v-on:submit.prevent="processUpdateTransaction(id_transaction)">
         <select type="number" v-model="id_transaction">
           <option v-for="transaction in transaction_list" :value="transaction.id">
-            {{ transaction.transaction_date}} -{{ transaction.store_name }} - ${{ transaction.transaction_value }} -{{ transaction.credit_card.card_name }} 
+            {{ transaction.id}} -{{ transaction.store_name }} - ${{ transaction.transaction_value }} -{{ transaction.credit_card.card_name }} 
             
           </option>
         </select>
@@ -61,6 +60,7 @@ export default {
       },
       credit_card: [],
       transaction_list: [],
+      username: localStorage.getItem("username") || "none",
     };
   },
 
@@ -187,8 +187,7 @@ export default {
 }
 
 .container_transaction_creation {
-  border: 1px solid #283747;
-  border-radius: 20px;
+
   width: 30%;
   height: 50%;
 

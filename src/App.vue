@@ -12,7 +12,8 @@
         <a class="links_menu" href="#" v-if="!is_auth" v-on:click="loadLogIn">LogIn</a>
         <a class="links_menu" href="#" v-if="!is_auth" v-on:click="loadSignUp">SignUp</a>
         <a class="links_menu" href="#" v-if="is_auth" v-on:click="logOut">Logout</a>
-        <a class="links_menu" href="#" >About</a>
+        <a class="links_menu" href="#" v-if="!is_auth" v-on:click="loadAbout" >About</a>
+        <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadAbout" >About</a>
         
       </div>
       </nav>
@@ -78,6 +79,9 @@ export default {
     },
     loadTransactionUpdate: function () {
       this.$router.push({ name: "transactionupdate" });
+    },
+        loadAbout: function () {
+      this.$router.push({ name: "about" });
     },
     logOut: function () {
       localStorage.clear();
