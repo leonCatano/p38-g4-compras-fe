@@ -8,7 +8,7 @@
         <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadHome">Home</a>
         <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadProfile">My profile</a>
         <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadTransaction"> Make a transaction</a>  
-            
+        <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadTransactionUpdate"> Update a transaction</a>     
         <a class="links_menu" href="#" v-if="!is_auth" v-on:click="loadLogIn">LogIn</a>
         <a class="links_menu" href="#" v-if="!is_auth" v-on:click="loadSignUp">SignUp</a>
         <a class="links_menu" href="#" v-if="is_auth" v-on:click="logOut">Logout</a>
@@ -75,6 +75,9 @@ export default {
     },
     loadTransaction: function () {
       this.$router.push({ name: "transaction" });
+    },
+    loadTransactionUpdate: function () {
+      this.$router.push({ name: "transactionupdate" });
     },
     logOut: function () {
       localStorage.clear();

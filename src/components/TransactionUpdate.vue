@@ -8,20 +8,25 @@
   </div>
   <div class="transaction_creation">
     <div class="container_transaction_creation">
-      <h2>Transaction registration</h2>
+      <h2>Transaction edition</h2>
 
-      <form v-on:submit.prevent="processCreateTransaction">
-        <h7>Value to cancel:</h7>
+      <form v-on:submit.prevent="processUpdateTransaction(id_transaction)">
+        <select type="number" v-model="id_transaction">
+          <option v-for="transaction in transaction_list" :value="transaction.id">
+            {{ transaction.transaction_date}} -{{ transaction.store_name }} - ${{ transaction.transaction_value }} -{{ transaction.credit_card.card_name }} 
+            
+          </option>
+        </select>
+        <br />
+        <h7>Value to update:</h7>
         <input
           type="number"
           v-model="transaction.transaction_value"
           placeholder="Transaction value"
+          
         />
         <br />
-        <h7>Store's name:</h7>
-        <input type="text" v-model="transaction.store_name" />
-
-        <h7>Select credit card:</h7>
+        <h7>Select new credit card:</h7>
         <br />
         <select type="number" v-model="transaction.id_credit_card">
           <option v-for="credit_card in credit_card" :value="credit_card.id">
@@ -29,20 +34,22 @@
           </option>
         </select>
         <br />
+        
+        <h7>New Store's name:</h7>
+        <input type="text" v-model="transaction.store_name" />
+
         <br />
-        <button type="submit">Send transaction</button>
+        <button type="submit">Update transaction</button>
       </form>
     </div>
   </div>
-  
-  
 </template>
 
 <script>
 import jwt_decode from "jwt-decode";
 import axios from "axios";
 export default {
-  name: "createTransaction",
+  name: "transactionupdate",
   data: function () {
     return {
       transaction: {
@@ -54,7 +61,6 @@ export default {
       },
       credit_card: [],
       transaction_list: [],
-      
     };
   },
 
@@ -118,28 +124,33 @@ export default {
           console.log("Error en el axios");
         });
     },
-    processCreateTransaction: function () {
+
+    processUpdateTransaction: async function (id_transaction) {
+
+      await this.verifyToken();
       let token = localStorage.getItem("token_access");
       let userId = jwt_decode(token).user_id.toString();
+      console.log(id_transaction);
+      console.log(this.transaction);
+      console.log(userId)
 
       axios
-        .post(
-          `https://p37-g4-be-compra-tg.herokuapp.com/transaction/${userId}`,
+        .put(
+          `https://p37-g4-be-compra-tg.herokuapp.com/transaction/update/${userId}/`+id_transaction+"/",
           this.transaction,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
+          {headers: { Authorization: `Bearer ${token}` },}
         )
         .then((result) => {
-          alert("Succesful transaction");
+          alert("Transaction updated");
+          this.transaction = result.data;
           this.$router.push({ name: "profile" });
         })
         .catch((error) => {
-          this.$emit("logOut");
+          /*this.$emit("logOut");*/
           console.log("Error en el axios");
+          console.log(token)
         });
     },
-   
     verifyToken: function () {
       return axios
         .post(
