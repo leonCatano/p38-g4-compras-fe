@@ -28,10 +28,10 @@ export default {
 }
 .greetings h1 {
   font-size: 50px;
-  color: #283747;
+  color: #163f6a;
 }
 .greetings span {
-  color: crimson;
+  color: #163f6a;
   font-weight: bold;
 }
 </style>

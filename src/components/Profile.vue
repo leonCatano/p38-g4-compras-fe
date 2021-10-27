@@ -1,13 +1,18 @@
 <template>
   <div>
     <h1>
-      ¡Welcome <span> {{ username }} </span>! These are your credit cards
+      ¡Welcome <span> {{ username }} </span>! 
     </h1>
+    <br>
+        <h3>
+            This is the information about: your credit cards and your transactions 
+        </h3>
+    <br>
   </div>
   <div>
-    <h1>CREDIT CARDS</h1>
+    <h1 align="center">CREDIT CARDS </h1>
     <div>
-      <table>
+      <table class="table">
         <tr>
           <th>ID</th>
           <th>Name</th>
@@ -35,10 +40,12 @@
       </table>
     </div>
   </div>
-  <div>
-    <h1>Transactions</h1>
+  <div class="tablat">
+  <br>
+    <h1 align="center">TRANSACTIONS</h1>
+    <br>
     <div>
-      <table>
+      <table class="table">
         <tr>
           <th>ID</th>
           <th>Date</th>
@@ -72,7 +79,7 @@
             
           </td>
           <td>
-            <button v-on:click="deleteTransaction(transaction.id)">X</button>
+            <button v-on:click="deleteTransaction(transaction.id)" style="cursor: pointer; font-size: 10px; padding: 5px 8px;  border-radius: 50%;  background: #ff0018a8"><strong>X</strong></button>
           </td>
         </tr>
       </table>
@@ -218,4 +225,27 @@ export default {
   color: crimson;
   font-weight: bold;
 }
+
+.table{
+  align:"center"; 
+  height:100% ;
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #212529;
+ 
+}
+
+.button  {
+  font-size:10px;
+  padding: 10px 25px;
+  border-radius: 50%;
+  
+  color: #e5e7e9;
+  background: #173f6a;
+  
+}
+.tablat{
+  padding-bottom: 150px;
+}
+
 </style>

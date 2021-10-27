@@ -2,18 +2,21 @@
   <div id="app" class="app">
     <div class="header">
       <img src="@\assets\logopaymin.png" />
-      <nav>
-        <button v-if="is_auth" v-on:click="loadHome">Home</button>
-        <button v-if="is_auth" v-on:click="loadProfile">My profile</button>
-        <button v-if="is_auth" v-on:click="loadTransaction">
-          Make a transaction
-        </button>
+    
+      <nav id="navegacion">
+      <div class="menu">     
+        <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadHome">Home</a>
+        <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadProfile">My profile</a>
+        <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadTransaction"> Make a transaction</a>  
+            
+        <a class="links_menu" href="#" v-if="!is_auth" v-on:click="loadLogIn">LogIn</a>
+        <a class="links_menu" href="#" v-if="!is_auth" v-on:click="loadSignUp">SignUp</a>
+        <a class="links_menu" href="#" v-if="is_auth" v-on:click="logOut">Logout</a>
+        <a class="links_menu" href="#" >About</a>
         
-        
-        <button v-if="!is_auth" v-on:click="loadLogIn">LogIn</button>
-        <button v-if="!is_auth" v-on:click="loadSignUp">SignUp</button>
-        <button v-if="is_auth" v-on:click="logOut">Logout</button>
+      </div>
       </nav>
+      
     </div>
     <div class="main-component">
       <router-view
@@ -24,7 +27,9 @@
       </router-view>
     </div>
     <div class="footer">
+           <div class="sharethis-inline-share-buttons"></div>
       <h2>PayMin - Misión TIC 2022</h2>
+
     </div>
   </div>
 </template>
@@ -88,15 +93,15 @@ body {
   margin: 0 0 0 0;
 }
 .header {
-  margin: 0%;
+  margin: auto;
   padding: 0;
   width: 100%;
-  height: 10vh;
+  height: 15vh;
   min-height: 100px;
 
-  background-color: #ffffff;
+  background-color: #b5c1c6;
 
-  border-top: 3px solid #3a90cb;
+  border-top: 3px solid #0071bc;
   border-bottom: 1px solid rgba(53, 110, 124, 0.5);
   color: #e5e7e9;
 
@@ -106,25 +111,46 @@ body {
 }
 
 .header img {
-  height: 70%;
-  padding-left: 50px;
+  height: 100%;
+  padding-left: 15px;
   align-self: center;
 }
 .header h1 {
   width: 20%;
   text-align: center;
 }
-.header nav {
-  height: 100%;
-  width: 20%;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+.navegacion {
+  
+  width: 100%;
+  
+  margin:30px auto;
+ 
+  
+}
+.navegacion ul {
+  list-style:none;
+  
+  
+}
+.menu > li {
+  display:block;   
+}
+
+.links_menu{
+  padding: 15px;
+}
+
+a.links_menu{
+  color: #0071bc;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
   font-size: 20px;
+}
+.links_menu:hover{
+  color: whitesmoke;
 }
 
 .header nav button {
-  color: #e5e7e9;
+  color: #263747;
   background: #283747;
   border: 1px solid #e5e7e9;
 
@@ -150,18 +176,19 @@ body {
 .footer {
   margin: 0;
   padding: 0;
+  margin-top: 10px;
   width: 100%;
-  height: 10vh;
+  height: 15vh;
   min-height: 100px;
-
-  background-color: #283747;
+  background-color: #0071bc;
   color: #e5e7e9;
+  position: fixed;
+  padding-bottom: 10px;
 }
 
 .footer h2 {
   width: 100%;
-  height: 100%;
-
+  height: 15%;
   display: flex;
   justify-content: center;
   align-items: center;
