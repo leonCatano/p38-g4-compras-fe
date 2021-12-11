@@ -1,11 +1,11 @@
 <template>
   <div>
     <h1>
-      ¡Welcome <span> {{ username }} </span>! 
+      ¡Welcome <span> {{ username }} </span>!
     </h1>
     <br>
         <h3>
-            This is the information about: your credit cards and your transactions 
+            This is the information about: your credit cards and your transactions
         </h3>
     <br>
   </div>
@@ -20,21 +20,24 @@
           <th>Franchise</th>
           <th>Bank's Name</th>
         </tr>
-        <tr v-for="credit_card in credit_card" >
+        <tr v-for="creditCardByUserId in creditCardByUserId" :key="creditCardByUserId.id" >
           <td>
-            {{ credit_card.id }}
+            {{ creditCardByUserId.id }}
           </td>
           <td>
-            {{ credit_card.card_name }}
+            {{ creditCardByUserId.card_name }}
           </td>
           <td>
-            {{ credit_card.card_number }}
+            {{ creditCardByUserId.card_number }}
           </td>
           <td>
-            {{ credit_card.card_franchise }}
+            {{ creditCardByUserId.card_franchise }}
           </td>
           <td>
-            {{ credit_card.bank_name }}
+            {{ creditCardByUserId.bank_name }}
+          </td>
+          <td>
+            <button v-on:click="deleteCredirCard(creditCardByUserId.id)" style="cursor: pointer; font-size: 10px; padding: 5px 8px;  border-radius: 50%;  background: #ff0018a8"><strong>X</strong></button>
           </td>
         </tr>
       </table>
@@ -50,36 +53,35 @@
           <th>ID</th>
           <th>Date</th>
           <th>Status</th>
+          <th>Product</th>
           <th>Value</th>
-          <th>Store name</th>
           <th>Credit card</th>
           <th>Action</th>
         </tr>
-        <tr v-for="transaction in transaction" :key="transaction.id">
+        <tr v-for="transactionByIdUser in transactionByIdUser" :key="transactionByIdUser.id">
           <td>
-            {{ transaction.id }}
+            {{ transactionByIdUser.id }}
           </td>
           <td>
-            {{ transaction.transaction_date }}
+            {{ transactionByIdUser.transaction_date }}
           </td>
           <td>
-            <span v-if="transaction.transaction_status == 'A'">Aprobada</span>
-            <span v-if="transaction.transaction_status == 'D'">Denegada</span>
-            <span v-if="transaction.transaction_status == 'R'">Reversado</span>
-            <span v-if="transaction.transaction_status == 'E'">En proceso</span>
+            <span v-if="transactionByIdUser.transaction_status == 'A'">Aprobada</span>
+            <span v-if="transactionByIdUser.transaction_status == 'D'">Denegada</span>
+            <span v-if="transactionByIdUser.transaction_status == 'R'">Reversado</span>
+            <span v-if="transactionByIdUser.transaction_status == 'E'">En proceso</span>
           </td>
           <td>
-            {{ transaction.transaction_value }}
+            {{ transactionByIdUser.store_name }}
           </td>
           <td>
-            {{ transaction.store_name }}
+            {{ transactionByIdUser.transaction_value }}
           </td>
           <td>
-           {{ transaction.credit_card.card_name }}
-            
+            {{ transactionByIdUser.credit_card.card_name }}
           </td>
           <td>
-            <button v-on:click="deleteTransaction(transaction.id)" style="cursor: pointer; font-size: 10px; padding: 5px 8px;  border-radius: 50%;  background: #ff0018a8"><strong>X</strong></button>
+            <button v-on:click="deleteTransaction(transactionByIdUser.id)" style="cursor: pointer; font-size: 10px; padding: 5px 8px;  border-radius: 50%;  background: #ff0018a8"><strong>X</strong></button>
           </td>
         </tr>
       </table>
@@ -88,116 +90,98 @@
 </template>
 
 <script>
+import gql from "graphql-tag";
 import jwt_decode from "jwt-decode";
-import axios from "axios";
 
 export default {
   name: "Profile",
-
   data: function () {
     return {
-      credit_card: [],
-      username: localStorage.getItem("username") || "none",
-      transaction: [],
-    };
+      userId: jwt_decode(localStorage.getItem("token_refresh")).user_id,
+      creditcardByUserId: [],
+      transactionByIdUser: [],
+    }
+  },
+  apollo: {
+    transactionByIdUser: {
+      query: gql`
+      query ($userId: Int!) {
+        transactionByIdUser(userId: $userId) {
+          id
+          transaction_date
+          transaction_status
+          transaction_value
+          store_name
+          credit_card {
+            id
+            card_name
+            card_number
+            card_franchise
+            bank_name
+            id_user
+          }
+        }
+      }
+    `,
+    variables() {
+      return {
+        userId: this.userId,
+      };
+    },
+  },
+  creditCardByUserId: {
+    query: gql`
+      query ($userId: Int!) {
+        creditCardByUserId(userId: $userId) {
+          id
+          card_name
+          card_number
+          card_franchise
+          bank_name
+          id_user
+        }
+      }
+    `,
+    variables() {
+      return {
+        userId: this.userId,
+      };
+    },
+  },
+},
+  created: function () {
+    this.$apollo.queries.transactionByIdUser.refetch();
+    this.$apollo.queries.creditCardByUserId.refetch();
   },
   methods: {
-    getData: async function () {
-      if (
-        localStorage.getItem("token_access") === null ||
-        localStorage.getItem("token_refresh") === null
-      ) {
-        this.$emit("logOut");
-        console.log("Error al comparar tokens");
-        return;
-      }
-
-      await this.verifyToken();
-      let token = localStorage.getItem("token_access");
-      let userId = jwt_decode(token).user_id.toString();
-
-      axios
-        .get(
-          `https://p37-g4-be-compra-tg.herokuapp.com/creditCard/list/${userId}/`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
-        .then((response) => {
-          console.log("Tarjetas listadas");
-          this.credit_card = response.data;
-        })
-        .catch(() => {
-          /*this.$emit("logOut");*/
-          console.log("Error en el axios");
-        });
-      axios
-        .get(
-          `https://p37-g4-be-compra-tg.herokuapp.com/transaction/list/${userId}/`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
-        .then((response) => {
-          console.log("Transacciones listadas");
-          this.transaction = response.data;
-        })
-        .catch(() => {
-          /*this.$emit("logOut");*/
-          console.log("Error en el axios");
-        });
-    },
-    deleteTransaction: async function (id_transaction) {
-      if (
-        localStorage.getItem("token_access") === null ||
-        localStorage.getItem("token_refresh") === null
-      ) {
-        this.$emit("logOut");
-        console.log("Error al comparar tokens");
-        return;
-      }
-
-      await this.verifyToken();
-      let token = localStorage.getItem("token_access");
-      let userId = jwt_decode(token).user_id.toString();
-      
-      axios
-        .get(
-          `https://p37-g4-be-compra-tg.herokuapp.com/transaction/remove/${userId}/` +
-            id_transaction +
-            "/",
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        )
-        .then((result) => {
-          this.getData();
-          alert("Transacción eliminada correctamente.");
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("ERROR: No se pudo borrar.");
-        });
-    },
-    verifyToken: function () {
-      return axios
-        .post(
-          "https://p37-g4-be-compra-tg.herokuapp.com/refresh/",
-          { refresh: localStorage.getItem("token_refresh") },
-          { headers: {} }
-        )
-        .then((result) => {
-          localStorage.setItem("token_access", result.data.access);
-        })
-        .catch(() => {
-          this.$emit("home");
-          console.log("Error en el refresh token");
-        });
-    },
-  },
-
-  created: async function () {
-    this.getData();
+    deleteTransaction(transactionId){
+      alert("");
+      this.$apollo.mutate({
+             mutation: gql`
+             mutation DeleteTransaction($userId: Int!, $transactionId: Int!) {
+              deleteTransaction(userId: $userId, transactionId: $transactionId)
+            }`,
+             variables:{
+             userId: this.userId,
+             transactionId: transactionId
+             }
+           })
+         location.reload();
+       },
+       deleteCredirCard(creditCardId){
+         alert("");
+         this.$apollo.mutate({
+                mutation: gql`
+                mutation DeleteCreditCard($userId: Int!, $creditCardId: Int!) {
+                  deleteCreditCard(userId: $userId, creditCardId: $creditCardId)
+                }`,
+                variables:{
+                  userId: this.userId,
+                  creditCardId: creditCardId
+                }
+              })
+            location.reload();
+          },
   },
 };
 </script>
@@ -227,22 +211,22 @@ export default {
 }
 
 .table{
-  align:"center"; 
+  align:"center";
   height:100% ;
   width: 100%;
   margin-bottom: 1rem;
   color: #212529;
- 
+
 }
 
 .button  {
   font-size:10px;
   padding: 10px 25px;
   border-radius: 50%;
-  
+
   color: #e5e7e9;
   background: #173f6a;
-  
+
 }
 .tablat{
   padding-bottom: 150px;

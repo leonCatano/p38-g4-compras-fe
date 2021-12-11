@@ -6,18 +6,17 @@
 
   </div>
   <div class="about">
-      <h2>Johanna Zuluaga Quiros</h2>
+    <h2>Johanna Zuluaga Quiros</h2>
     <br>
-    <h2>Sebastian Castilla Matallana</h2>
+    <h2>Leon Andres Cataño</h2>
     <br>
-    <h2>Cristian Danilo gonzalez Pedraza</h2>
+    <h2>Sergio Pinta</h2>
     <br>
-    <h2>Miller Alexander Moreno</h2>
-        <br>
-            <h2>Carlos Hernan Cuesta Niño</h2>
+    <h2>Diana Mongua</h2>
     <br>
-    <h2>Duban Castiblanco</h2>
-    
+    <h2>Edder Ramos</h2>
+    <br>
+    <h2>Brayan Beltran</h2>
   </div>
 </template>
 <script>
@@ -25,7 +24,7 @@ export default {
   name: "About",
   data: function () {
     return {
-      
+
     };
   },
 };
@@ -39,12 +38,14 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+
 }
 .about{
     text-align: center;
+    font-size: 10px;
 }
 .greetings h1 {
-  font-size: 50px;
+  font-size: 40px;
   color: #163f6a;
 }
 .greetings span {

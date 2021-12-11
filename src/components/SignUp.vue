@@ -3,32 +3,19 @@
     <div class="signUp_user">
         <div class="container_signUp_user">
             <h2>Sign up</h2>
-                
+
             <form v-on:submit.prevent="processSignUp" >
                 <input type="text" v-model="user.username" placeholder="Username">
                 <br>
-                    
+
                 <input type="password" v-model="user.password" placeholder="Password">
                 <br>
-                    
+
                 <input type="text" v-model="user.name" placeholder="Name">
                 <br>
-                    
+
                 <input type="email" v-model="user.email" placeholder="Email">
                 <br>
-
-                <input type="text" v-model="user.credit_card.card_name" placeholder="Credit Card name">
-                <br>
-
-                <input type="number" v-model="user.credit_card.card_number" placeholder="Credit Card number">
-                <br>
-
-                <input type="text" v-model="user.credit_card.card_franchise" placeholder="Franchise">
-                <br>
-
-                <input type="text" v-model="user.credit_card.bank_name" placeholder="Bank name">
-                <br>
-
 
                 <button type="submit">Sign up</button>
             </form>
@@ -37,50 +24,48 @@
 </template>
 
 <script>
-import axios from 'axios';
-
+import gql from "graphql-tag";
 export default {
-    name: "SignUp",
-
-    data: function(){
-        return {
-            user: {
-                username: "",
-                password: "",
-                name: "",
-                email: "",
-                credit_card: {
-                    card_name: "",
-                    card_number: 0,
-                    card_franchise: "",
-                    bank_name:""
-                }
+  name: "SignUp",
+  data: function() {
+    return {
+      user: {
+        username: "",
+        password: "",
+        name: "",
+        email: "",
+      },
+    };
+  },
+  methods: {
+    processSignUp: async function() {
+      await this.$apollo
+        .mutate({
+          mutation: gql`
+            mutation($userInput: SignUpInput!) {
+              signUpUser(userInput: $userInput) {
+                refresh
+                access
+              }
             }
-        }
+            `,
+            variables: {
+              userInput: this.user,
+            },
+        })
+        .then((result) => {
+          let dataLogIn = {
+            username: this.user.username,
+            token_access: result.data.signUpUser.access,
+            token_refresh: result.data.signUpUser.refresh,
+          };
+          this.$emit("completedSignUp", dataLogIn);
+        })
+        .catch((error) => {
+          alert("ERROR: Fallo en el registro.");
+        });
+      },
     },
-
-methods: {
-    processSignUp: function(){
-        axios.post(
-            "https://p37-g4-be-compra-tg.herokuapp.com/user/",
-            this.user,
-            {headers: {}}
-        )
-            .then((result) => {
-                let dataSignUp = {
-                    username: this.user.username,
-                    token_access: result.data.access,
-                    token_refresh: result.data.refresh,
-                }
-
-                this.$emit('completedSignUp', dataSignUp)
-            })
-            .catch((error) => {
-                console.log(error)
-                alert("ERROR: Fallo en el registro.");
-            });
-        }
-    }
 }
 </script>
 
@@ -94,7 +79,7 @@ methods: {
         display: flex;
         justify-content: center;
         align-items: center;
-  
+
     }
 
     .container_signUp_user {
@@ -111,7 +96,7 @@ methods: {
     .signUp_user h2{
         color: #283747;
     }
-    
+
     .signUp_user form{
         width: 70%;
     }

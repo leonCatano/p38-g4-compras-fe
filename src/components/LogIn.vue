@@ -15,11 +15,10 @@
 </template>
 
 <script>
-import axios from "axios";
-
+import gql from "graphql-tag";
 export default {
   name: "LogIn",
-  data: function () {
+  data: function() {
     return {
       user: {
         username: "",
@@ -28,26 +27,35 @@ export default {
     };
   },
   methods: {
-    processLogInUser: function () {
-      axios
-        .post("https://p37-g4-be-compra-tg.herokuapp.com/login/", this.user, {
-          headers: {},
-        })
-        .then((result) => {
-          let dataLogIn = {
-            username: this.user.username,
-            token_access: result.data.access,
-            token_refresh: result.data.refresh,
-          };
-          this.$emit("completedLogIn", dataLogIn);
-        })
-        .catch((error) => {
-          if (error.response.status == "401")
-            alert("ERROR 401: Credenciales Incorrectas.");
-        });
+    processLogInUser: async function() {
+      await this.$apollo
+      .mutate({
+        mutation: gql`
+          mutation($credentials: CredentialsInput!) {
+            logIn(credentials: $credentials) {
+              refresh
+              access
+            }
+          }
+        `,
+        variables: {
+          credentials: this.user,
+        },
+      })
+      .then((result) => {
+        let dataLogIn = {
+          username: this.user.username,
+          token_access: result.data.logIn.access,
+          token_refresh: result.data.logIn.refresh,
+        };
+        this.$emit("completedLogIn", dataLogIn);
+      })
+      .catch((error) => {
+        alert("ERROR 401: Credenciales Incorrectas.");
+      });
     },
   },
-};
+}
 </script>
 
 <style>
