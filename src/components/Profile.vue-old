@@ -37,7 +37,7 @@
             {{ creditCardByUserId.bank_name }}
           </td>
           <td>
-            <button v-on:click="deleteCreditCard(creditCardByUserId.id)" style="cursor: pointer; font-size: 10px; padding: 5px 8px;  border-radius: 50%;  background: #ff0018a8"><strong>X</strong></button>
+            <button v-on:click="deleteCredirCard(creditCardByUserId.id)" style="cursor: pointer; font-size: 10px; padding: 5px 8px;  border-radius: 50%;  background: #ff0018a8"><strong>X</strong></button>
           </td>
         </tr>
       </table>
@@ -154,81 +154,36 @@ export default {
     this.$apollo.queries.creditCardByUserId.refetch();
   },
   methods: {
-
-  /*
-  deleteTransaction: async function(transactionId){
-  console.log(transactionId);
-  await this.$apollo.mutate(
-      {
-          mutation: gql`
-          mutation DeleteTransaction($userId: Int!, $transactionId: Int!) {
-           deleteTransaction(userId: $userId, transactionId: $transactionId)
-          }
-          `,
-          variables: {
-            userId: this.userId,
-            transactionId: this.transactionId,
-          }
-      }
-  )
-  .then((result) => {
-      console.log(result);
-  })
-  .catch((error) => {
-      console.log(error);
-  })
-  this.$apollo.queries.transactionByIdUser.refetch();
-
-},
-*/
-deleteTransaction: async function(transactionId){
-                await this.$apollo.mutate(
-                    {
-                        mutation: gql`
-                        mutation DeleteTransaction($userId: Int!, $transactionId: Int!) {
-                          deleteTransaction(userId: $userId, transactionId: $transactionId)
-                            }
-                        `,
-                        variables: {
-                        userId: this.userId,
-                        transactionId: transactionId
-                        }
-                    }
-                )
-                .then((result) => {
-                    console.log(result);
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-                this.$apollo.queries.transactionByIdUser.refetch();
-
-},
-deleteCreditCard: async function(creditCardId){
-                await this.$apollo.mutate(
-                    {
-                        mutation: gql`
-                        mutation DeleteCreditCard($userId: Int!, $creditCardId: Int!) {
-                          deleteCreditCard(userId: $userId, creditCardId: $creditCardId)
-                            }
-                        `,
-                        variables: {
-                        userId: this.userId,
-                        creditCardId: creditCardId
-                        }
-                    }
-                )
-                .then((result) => {
-                    console.log(result);
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-                this.$apollo.queries.creditCardByUserId.refetch();
-
-
-            }
-    }
+    deleteTransaction(transactionId){
+      alert("");
+      this.$apollo.mutate({
+             mutation: gql`
+             mutation DeleteTransaction($userId: Int!, $transactionId: Int!) {
+              deleteTransaction(userId: $userId, transactionId: $transactionId)
+            }`,
+             variables:{
+             userId: this.userId,
+             transactionId: transactionId
+             }
+           })
+         location.reload();
+       },
+       deleteCreditCard(creditCardId){
+         alert("");
+         this.$apollo.mutate({
+                mutation: gql`
+                mutation DeleteCreditCard($userId: Int!, $creditCardId: Int!) {
+                  deleteCreditCard(userId: $userId, creditCardId: $creditCardId)
+                }`,
+                variables:{
+                  userId: this.userId,
+                  creditCardId: creditCardId
+                }
+              })
+            location.reload();
+          },
+        },
+      
 };
 </script>
 
