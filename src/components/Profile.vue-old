@@ -155,7 +155,6 @@ export default {
   },
   methods: {
     deleteTransaction(transactionId){
-      alert("");
       this.$apollo.mutate({
              mutation: gql`
              mutation DeleteTransaction($userId: Int!, $transactionId: Int!) {
@@ -169,7 +168,6 @@ export default {
          location.reload();
        },
        deleteCreditCard(creditCardId){
-         alert("");
          this.$apollo.mutate({
                 mutation: gql`
                 mutation DeleteCreditCard($userId: Int!, $creditCardId: Int!) {
@@ -183,7 +181,7 @@ export default {
             location.reload();
           },
         },
-      
+
 };
 </script>
 

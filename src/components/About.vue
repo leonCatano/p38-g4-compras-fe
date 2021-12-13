@@ -6,17 +6,17 @@
 
   </div>
   <div class="about">
-    <h2>Johanna Zuluaga Quiros</h2>
+    <h3>Johanna Zuluaga Quiros</h3>
     <br>
-    <h2>Leon Andres Cataño</h2>
+    <h3>Leon Andres Cataño</h3>
     <br>
-    <h2>Sergio Pinta</h2>
+    <h3>Sergio Pinta</h3>
     <br>
-    <h2>Diana Mongua</h2>
+    <h3>Diana Mongua</h3>
     <br>
-    <h2>Edder Ramos</h2>
+    <h3>Edder Ramos</h3>
     <br>
-    <h2>Brayan Beltran</h2>
+    <h3>Brayan Beltran</h3>
   </div>
 </template>
 <script>

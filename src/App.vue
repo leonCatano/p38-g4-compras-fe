@@ -2,22 +2,23 @@
   <div id="app" class="app">
     <div class="header">
       <img src="@\assets\logopaymin.png" />
-    
+
       <nav id="navegacion">
-      <div class="menu">     
+      <div class="menu">
         <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadHome">Home</a>
         <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadProfile">My profile</a>
-        <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadTransaction"> Make a transaction</a>  
-        <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadTransactionUpdate"> Update a transaction</a>     
+        <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadCreditCard">Credit Card</a>
+        <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadStore">Store</a>
+        <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadProduct">Product</a>
         <a class="links_menu" href="#" v-if="!is_auth" v-on:click="loadLogIn">LogIn</a>
         <a class="links_menu" href="#" v-if="!is_auth" v-on:click="loadSignUp">SignUp</a>
         <a class="links_menu" href="#" v-if="is_auth" v-on:click="logOut">Logout</a>
         <a class="links_menu" href="#" v-if="!is_auth" v-on:click="loadAbout" >About</a>
         <a class="links_menu" href="#" v-if="is_auth" v-on:click="loadAbout" >About</a>
-        
+
       </div>
       </nav>
-      
+
     </div>
     <div class="main-component">
       <router-view
@@ -74,13 +75,19 @@ export default {
     loadProfile: function () {
       this.$router.push({ name: "profile" });
     },
+    loadCreditCard: function () {
+      this.$router.push({ name: "creditCard" });
+    },
     loadTransaction: function () {
       this.$router.push({ name: "transaction" });
     },
     loadTransactionUpdate: function () {
       this.$router.push({ name: "transactionupdate" });
     },
-        loadAbout: function () {
+    loadProduct: function () {
+      this.$router.push({ name: "product" });
+    },
+    loadAbout: function () {
       this.$router.push({ name: "about" });
     },
     logOut: function () {
@@ -88,7 +95,11 @@ export default {
       alert("Log Out");
       this.verifyAuth();
     },
+    loadStore: function () {
+      this.$router.push({ name: "store" });
+    },
   },
+
   created: function () {
     this.verifyAuth();
   },
@@ -127,20 +138,20 @@ body {
   text-align: center;
 }
 .navegacion {
-  
+
   width: 100%;
-  
+
   margin:30px auto;
- 
-  
+
+
 }
 .navegacion ul {
   list-style:none;
-  
-  
+
+
 }
 .menu > li {
-  display:block;   
+  display:block;
 }
 
 .links_menu{

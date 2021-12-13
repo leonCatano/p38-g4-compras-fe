@@ -5,9 +5,10 @@ import LogIn from './components/LogIn.vue'
 import SignUp from './components/SignUp.vue'
 import Home from './components/Home.vue'
 import Profile from './components/Profile.vue'
-import Transaction from './components/Transaction.vue'
-import TransactionUpdate from './components/TransactionUpdate.vue'
+import CreditCard from './components/CreditCard.vue'
 import About             from './components/About.vue'
+import Store             from './components/Store.vue'
+import Product           from './components/Product.vue'
 
 const routes = [{
   path: '/',
@@ -35,19 +36,24 @@ const routes = [{
   component: Profile
 },
 {
-  path: '/user/transaction',
-  name: "transaction",
-  component: Transaction
-},
-{
-  path: '/user/transactionupdate',
-  name: "transactionupdate",
-  component: TransactionUpdate
+  path: '/user/creditCard',
+  name: "creditCard",
+  component: CreditCard
 },
 {
   path: '/about',
   name: "about",
   component: About
+},
+{
+  path: '/user/store',
+  name: "store",
+  component: Store
+},
+{
+  path: '/user/product',
+  name: "product",
+  component: Product
 }
 ];
 

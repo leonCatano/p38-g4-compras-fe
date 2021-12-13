@@ -19,6 +19,7 @@
           <th>Number</th>
           <th>Franchise</th>
           <th>Bank's Name</th>
+          <th>Delete</th>
         </tr>
         <tr v-for="creditCardByUserId in creditCardByUserId" :key="creditCardByUserId.id" >
           <td>
@@ -45,7 +46,7 @@
   </div>
   <div class="tablat">
   <br>
-    <h1 align="center">TRANSACTIONS</h1>
+    <h1 align="center">PURCHASES MADE</h1>
     <br>
     <div>
       <table class="table">
@@ -56,7 +57,7 @@
           <th>Product</th>
           <th>Value</th>
           <th>Credit card</th>
-          <th>Action</th>
+          <th>Delete</th>
         </tr>
         <tr v-for="transactionByIdUser in transactionByIdUser" :key="transactionByIdUser.id">
           <td>
